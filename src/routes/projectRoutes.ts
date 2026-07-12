@@ -148,7 +148,10 @@ router.put("/:id", authenticate, async (req: AuthRequest, res: Response) => {
       });
     }
 
-    if (project.owner.toString() !== req.user!.userId) {
+    // Allow owner or admin to update
+    const isOwner = project.owner.toString() === req.user!.userId;
+    const isAdmin = req.user!.role === "admin";
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
         error: "Not authorized to update this project",
@@ -191,7 +194,10 @@ router.delete("/:id", authenticate, async (req: AuthRequest, res: Response) => {
       });
     }
 
-    if (project.owner.toString() !== req.user!.userId) {
+    // Allow owner or admin to delete
+    const isOwner = project.owner.toString() === req.user!.userId;
+    const isAdmin = req.user!.role === "admin";
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
         error: "Not authorized to delete this project",

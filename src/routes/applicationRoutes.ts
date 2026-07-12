@@ -156,10 +156,13 @@ router.patch("/:id", authenticate, async (req: AuthRequest, res: Response) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const project = application.projectId as any;
-    if (project.owner.toString() !== req.user!.userId) {
+    // Allow project owner or admin to update status
+    const isOwner = project.owner.toString() === req.user!.userId;
+    const isAdmin = req.user!.role === "admin";
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
-        error: "Only the project owner can update application status",
+        error: "Only the project owner or admin can update application status",
       });
     }
 
