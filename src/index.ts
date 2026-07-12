@@ -5,6 +5,7 @@ import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import projectRoutes from "./routes/projectRoutes";
 import applicationRoutes from "./routes/applicationRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Health check
 app.get("/api/health", (_req, res) => {
