@@ -143,4 +143,52 @@ router.get("/profile", authenticate, async (req: AuthRequest, res: Response) => 
   }
 });
 
+// PATCH /api/auth/profile — Update own profile
+router.patch("/profile", authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const allowedFields = [
+      "name", "photo", "bio", "location",
+      "website", "github", "linkedin", "skills",
+    ];
+
+    const updates: Record<string, unknown> = {};
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No valid fields to update",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(req.user!.userId, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: "Profile updated successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error("Profile Update Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+});
+
 export default router;
