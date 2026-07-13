@@ -22,7 +22,15 @@ router.get("/", async (req: AuthRequest, res: Response) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filter: any = {};
 
-    if (search) filter.$text = { $search: search };
+    if (search) {
+      const searchRegex = new RegExp(search, "i");
+      filter.$or = [
+        { title: searchRegex },
+        { shortDescription: searchRegex },
+        { description: searchRegex },
+        { requiredSkills: searchRegex },
+      ];
+    }
     if (category) filter.category = category;
     if (difficulty) filter.difficulty = difficulty;
     if (status) filter.status = status;
