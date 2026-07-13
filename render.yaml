@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: buildbridge-server
+    env: node
+    region: singapore
+    buildCommand: npm install
+    startCommand: npx tsx src/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
