@@ -4,12 +4,12 @@ import { IApplication, ApplicationStatus } from "../types";
 const ApplicationSchema = new Schema<IApplication>(
   {
     projectId: {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId as unknown as typeof Schema.Types.String,
       ref: "Project",
       required: [true, "Project ID is required"],
     },
     applicantId: {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId as unknown as typeof Schema.Types.String,
       ref: "User",
       required: [true, "Applicant ID is required"],
     },

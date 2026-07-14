@@ -45,7 +45,7 @@ const ProjectSchema = new Schema<IProject>(
     image: { type: String, default: "" },
     images: { type: [String], default: [] },
     owner: {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId as unknown as typeof Schema.Types.String,
       ref: "User",
       required: [true, "Project owner is required"],
     },
